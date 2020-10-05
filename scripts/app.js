@@ -1,40 +1,36 @@
-(function(){
+(function() {
   'use strict';
 
-  angular.module('LunchCheck',[])
-  .controller('LunchCheckController',LunchCheckController);
+  angular.module('LunchCheck', [])
 
-  LunchCheckController.$inject=['$scope'];
-  function LunchCheckController($scope){
-    $scope.checkDishes=function(){
-      var num= countDishes($scope.dishes);
-      $scope.message=buildMessage(num);
-    };
+  .controller('LunchCheckController', LunchCheckController);
 
-    function countDishes(dishes){
-      var count=0;
-      if(dishes){
-        var array=dishes.split(',');
-        for(var idx in array)
-        {
-          if(array[idx].trim().length!=0){
-            count++;
-          }
-        }
-      }
-      return count;
-    }
+  LunchCheckController.$inject = ['$scope'];
 
-    function buildMessage(num){
-      if(num==0){
-        return 'Please enter data first';
-      }
-      else if (num<=3){
-        return 'Enjoy!';
-      }
-      else{
-        return 'Too much!';
+  function LunchCheckController($scope) {
+    $scope.dishes = '';
+    $scope.message = '';
+
+    $scope.checkDishes = function(dishes) {
+      var dishes = dishes.trim();
+      if(dishes) {
+        var arrayOfDishes = dishesToArray(dishes);
+        $scope.message = getMessage(arrayOfDishes.length);
+      } else {
+        $scope.message = 'Please enter data first';
       }
     }
   }
+  function dishesToArray(dishes) {
+    return dishes.split(',');
+  }
+  function getMessage(numberOfDishes) {
+    if(numberOfDishes > 3) {
+      return 'Too much!';
+    } else {
+      return 'Enjoy!';
+    }
+  }
+
+
 })();
